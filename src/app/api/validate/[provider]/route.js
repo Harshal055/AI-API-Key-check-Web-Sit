@@ -128,6 +128,50 @@ export async function POST(request, { params }) {
         }
         break;
 
+      case 'xai':
+        response = await fetch('https://api.x.ai/v1/models', {
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          models = data.data?.map(m => m.id) || [];
+        }
+        break;
+
+      case 'perplexity':
+        response = await fetch('https://api.perplexity.ai/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'sonar',
+            messages: [{ role: 'user', content: 'hi' }],
+            max_tokens: 1
+          }),
+        });
+        if (response.ok) {
+          models = ['sonar', 'sonar-pro', 'sonar-reasoning', 'sonar-reasoning-pro', 'sonar-deep-research', 'r1-1776'];
+        }
+        break;
+
+      case 'elevenlabs':
+        response = await fetch('https://api.elevenlabs.io/v1/voices', {
+          headers: {
+            'xi-api-key': apiKey,
+            'Content-Type': 'application/json',
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          models = data.voices?.map(v => ({ id: v.voice_id, name: v.name })) || [];
+        }
+        break;
+
       default:
         return NextResponse.json({ error: 'Unknown provider' }, { status: 400 });
     }

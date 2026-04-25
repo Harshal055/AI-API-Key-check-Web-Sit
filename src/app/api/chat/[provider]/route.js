@@ -25,6 +25,8 @@ export async function POST(request, { params }) {
       case 'together':
       case 'deepseek':
       case 'nvidia':
+      case 'xai':
+      case 'perplexity':
         const endpoints = {
           openai: 'https://api.openai.com/v1/chat/completions',
           groq: 'https://api.groq.com/openai/v1/chat/completions',
@@ -32,6 +34,8 @@ export async function POST(request, { params }) {
           together: 'https://api.together.xyz/v1/chat/completions',
           deepseek: 'https://api.deepseek.com/chat/completions',
           nvidia: 'https://integrate.api.nvidia.com/v1/chat/completions',
+          xai: 'https://api.x.ai/v1/chat/completions',
+          perplexity: 'https://api.perplexity.ai/chat/completions',
         };
 
         response = await fetch(endpoints[provider], {
